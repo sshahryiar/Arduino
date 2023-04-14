@@ -1,0 +1,10 @@
+Central
+
+MAC: 0x883314DF261F
+Name: BLUNO_CTRL 
+
+
+Peripheral
+
+MAC: 0x883314DF248A
+Name: BLUNO_PHPL
