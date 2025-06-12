@@ -71,7 +71,7 @@ void loop(void)
     case ZP07_light_pollution:
     {
       Serial.print("Poor.\t");
-      aq = ZP07_air_quality_25;
+      aq = ZP07_air_quality_75;
       digitalWrite(7, LOW);
       digitalWrite(6, HIGH);
       digitalWrite(5, LOW);
