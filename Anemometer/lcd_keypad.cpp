@@ -37,25 +37,6 @@ void lcd_kbd::init(void)
 }
 
 
-void lcd_kbd::send(uint8_t lcd_data, uint8_t mode)
-{
-  digitalWrite(LCD_RS_pin, mode);
-
-  send_4_bits(((lcd_data & 0xF0) >> 4));
-  send_4_bits((lcd_data & 0x0F));
-}
-
-
-void lcd_kbd::send_4_bits(uint8_t value)
-{
-  digitalWrite(LCD_D7_pin, ((value & 0x08) >> 3));
-  digitalWrite(LCD_D6_pin, ((value & 0x04) >> 2));
-  digitalWrite(LCD_D5_pin, ((value & 0x02) >> 1));
-  digitalWrite(LCD_D4_pin, (value & 0x01));
-	toggle_EN_pin();
-}
-
-
 void lcd_kbd::goto_xy(uint8_t x_pos, uint8_t y_pos)
 {
 	switch(y_pos)
@@ -87,22 +68,6 @@ void lcd_kbd::goto_xy(uint8_t x_pos, uint8_t y_pos)
 }
 
 
-void lcd_kbd::clear(void)
-{
-	send(clear_display, CMD);
-	send(goto_home, CMD);
-}
-
-
-void lcd_kbd::toggle_EN_pin(void)
-{
-	LCD_EN_HIGH;
-	delay(1);
-	LCD_EN_LOW;
-	delay(1);
-}
-
-
 void lcd_kbd::chr(uint8_t x_pos, uint8_t y_pos, char ch)
 {
 	goto_xy(x_pos, y_pos);
@@ -119,21 +84,10 @@ void lcd_kbd::text(uint8_t x_pos, uint8_t y_pos, const char *ch)
 }
 
 
-uint16_t lcd_kbd::adc_avg(void)
+void lcd_kbd::clear(void)
 {
-  int8_t sample = 4;
-  uint16_t average = 0;
-
-  while(sample > 0)
-  {
-    average += analogRead(keypad_pin);
-    sample--;
-    delayMicroseconds(10);
-  };
-
-  average >>= 2;
-
-  return average;
+	send(clear_display, CMD);
+	send(goto_home, CMD);
 }
 
 
@@ -170,4 +124,50 @@ uint8_t lcd_kbd::get_key(void)
   {
     return 0;
   }
+}
+
+
+void lcd_kbd::send(uint8_t lcd_data, uint8_t mode)
+{
+  digitalWrite(LCD_RS_pin, mode);
+
+  send_4_bits(((lcd_data & 0xF0) >> 4));
+  send_4_bits((lcd_data & 0x0F));
+}
+
+
+void lcd_kbd::send_4_bits(uint8_t value)
+{
+  digitalWrite(LCD_D7_pin, ((value & 0x08) >> 3));
+  digitalWrite(LCD_D6_pin, ((value & 0x04) >> 2));
+  digitalWrite(LCD_D5_pin, ((value & 0x02) >> 1));
+  digitalWrite(LCD_D4_pin, (value & 0x01));
+	toggle_EN_pin();
+}
+
+
+void lcd_kbd::toggle_EN_pin(void)
+{
+	LCD_EN_HIGH;
+	delay(1);
+	LCD_EN_LOW;
+	delay(1);
+}
+
+
+uint16_t lcd_kbd::adc_avg(void)
+{
+  int8_t sample = 4;
+  uint16_t average = 0;
+
+  while(sample > 0)
+  {
+    average += analogRead(keypad_pin);
+    sample--;
+    delayMicroseconds(10);
+  };
+
+  average >>= 2;
+
+  return average;
 }

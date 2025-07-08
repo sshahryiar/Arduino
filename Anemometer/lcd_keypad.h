@@ -95,12 +95,12 @@ class lcd_kbd
 		void goto_xy(uint8_t x_pos, uint8_t y_pos);
 		void chr(uint8_t x_pos, uint8_t y_pos, char ch);
 		void text(uint8_t x_pos, uint8_t y_pos, const char *ch);
+		void clear(void);
     uint8_t get_key(void);
 
 	private:
 		void send(uint8_t lcd_data, uint8_t mode);
     void send_4_bits(uint8_t value);
-		void clear(void);
 		void toggle_EN_pin(void);
     uint16_t adc_avg(void);
 };
